@@ -69,5 +69,27 @@ td{
             </span><br>
             {% else %}
             <div class='col-md-3'><a href="{% url 'add_profile' %}" class='btn btn-info' style='background-color: rgba(247, 120, 204, 0.267);border:none;'><i class="fas fa-plus"></i>Add profile</a></div>
-           
+            {% endif %}
+        </div><br>
+        <h5><b>Suggestions for you</b></h5><br>
+        <table class='table table-borderless'>
+            <tbody>
+                {% for user in users %}
+                {% if user != request.user and user.profile %}
+                <tr>
+                    <th>
+                        <img class="img-fluid rounded-circle " src="{{user.profile.profile_photo.url}}" style="height:40px;width:40px;margin-top:5px;margin-bottom:5px; border-radius:50%;"></div>
+                        <a href="/profile/{{user.profile.id}}" style='text-decoration: none; color:black'>{{user.username}}</span></a>
+                    </th>
+                    <td><a href="{%url 'follow' user.id %}"><b>Follow</b></a></td>
+                </tr>
+                {% endif %}
+                {% endfor%}
+            </tbody>
+        </table><br><br>
+        <p class='text-muted small'>&copy; 2021 | Instagram</p>
+        </div>
+</div>
+</div>
+
 {% endblock%}
