@@ -13,3 +13,44 @@
   }
 </style>
 <div class="container">
+  <div class="row">
+    <!-- Empty div -->
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      {% if form.errors %}
+        <p> Check your entries </p>
+      {% endif %}
+      <div class="panel panel-default">
+
+        <div class="panel-heading">
+          <h3 class="text-center" style="font-family: 'cursive', cursive;"><i class="fab fa-instagram"></i><b>Instapp</b></h3>
+          <h3 class="text-muted text-center small">Sign Up</h3>
+        </div>
+        <div class="panel-body">
+
+          <form  action="/accounts/register/" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary btn-sm" value="Sign Up"> &nbsp;<span> Already have an account? Click <a href="/accounts/login">here</a> to login</div></span>
+            </div>
+            <div>
+              <p class="text-muted small"> By signing up, you agree to our <b>Terms</b> , <a hreh="#"><b>Data Policy</b> and <b>Cookies Policy</b></a>.</p>
+          </div>
+            <input type="hidden" name="next" value="{{next}}">
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- empty div -->
+    <div class="col-md-4"></div>
+  </div>
+
+  <p class='text-muted small' style="text-align: center;">&copy; 2021 | Instagram</p>
+</div>
+
+{% endblock %}
