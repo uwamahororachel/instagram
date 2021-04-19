@@ -1,0 +1,57 @@
+
+{%extends "registration/base.html"%}
+{% load bootstrap3 %}
+{% block content %}
+<style>
+  body{
+    background-color:rgb(0, 0, 0);
+  }
+  .btn{
+    background-color:rgba(0, 49, 140, 0.486);
+    width: 70px;
+  }
+  .col-md-7{
+    margin-top:20vh;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class='col-md-3' id='login'></div>
+    <div class='col-md-7'>
+    <div class="col-md-10">
+      {% if form.errors %}
+        <p> Incorrect username or password </p>
+      {% endif %}
+      <div class="panel panel-default">
+
+        <div class="panel-heading">
+          <h3 class="text-center" style="font-family:'rsive', cursive;"><i class="fab fa-instagram"></i><b> Instagram</b></h3>
+          <h3 class="text-center">Welcome to Instagram!</h3>
+        </div>
+        <div class="panel-body">
+
+          <form  action="/accounts/login/" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form%}
+
+            <div class="form-group ">
+              <center><input type="submit" class="btn btn-primary btn-sm" value="Login"></center>
+            </div>
+            
+            <input type="hidden" name="next" value="{{next}}">
+              <center  style="font-size:15px; color: rgba(14, 14, 129, 0.61);"><i class="fab fa-facebook"></i> Login with Facebook</center>
+
+          </form>
+          <center><div>Don't have an account? <a href="/accounts/register"> Sign Up</a></div></center>
+        </div>
+
+      </div>
+      <p class='text-muted small' style="text-align: center;">&copy; 2021 UwamahororRachel| Instagram</p>
+
+    </div>
+    <!-- empty div -->
+    <div class="col-md-4"></div></div>
+  </div>
+</div>
+
+{% endblock %}
