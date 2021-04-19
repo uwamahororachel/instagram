@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .hovereffect {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+  }
+  .hovereffect .overlay {
+    position: absolute;
+    overflow: hidden;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 12%;
+    -webkit-transform: scale(0,1);
+    -ms-transform: scale(0,1);
+    transform: scale(0,1);
+  }
+  div.col-xs-6.col-sm-6.col-md-4.col-lg-3{
+    padding: 5px;
+    padding-bottom: 2px;
+}
+#gallery{
+    margin:40px auto;
+    padding:40px 10px;
+    border-top:1px grey solid; 
+}
+  .hovereffect:hover .overlay {
+    opacity: 1;
+    filter: alpha(opacity=100);
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+  
+  .hovereffect img {
+    display: block;
+    position: relative;
+    -webkit-transition: all 0.35s;
+    transition: all 0.35s;
+    margin-bottom: 7px;
+  }
+  
+  .hovereffect:hover img {
+    filter: brightness(0.6);
+    -webkit-filter: brightness(0.6);
+    -moz-filter: brightness(0.6);
+    -o-filter: brightness(0.6);
+    -ms-filter: brightness(0.6);
+  }
+  
+  .hovereffect h4 {
+      text-transform: uppercase;
+      text-align: center;
+      position: relative;
+      font-size: 15px;
+      background-color: transparent;
+      font-weight:bold;
+      color: #ffffff;
+      margin-top: 2em;
+      padding: 2em 2em;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      
+      -webkit-transform: translate3d(0,-100%,0);
+      transform: translate3d(0,-100%,0);
+      letter-spacing: 2px;
+  }
+  
+  .hovereffect p{
+      color: #FFF;
+      line-height: 1.8em;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+      transition: opacity 0.35s, transform 0.35s;
+      -webkit-transform: translate3d(0,100%,0);
+      transform: translate3d(0,100%,0);
+  }
+  
+  .hovereffect:hover p, .hovereffect:hover h4 {
+      opacity: 1;
+      filter: alpha(opacity=100);
+      -webkit-transform: translate3d(0,0,0);
+      transform: translate3d(0,0,0);
+  }
+  .fab { transform: scale(1.7,1.8); }
+</style>
+<div class="container-fluid" id="profile" style='margin-top:90px'>
+    <div class="row container" id="top">
+        <div class='col-xs-0 col-sm-0 col-md-3 col-lg-3'></div>
+        <div class="row">
+            <div class='col-md-2 col-lg-2'><img class="img-fluid rounded-circle " src="{{profile.profile_photo.url}}" height='150vh' style="width:100%; border-radius:50%;"></div>
+            <div class='col-md-5 col-lg-5' style="display:flex;flex-direction:column;justify-content: center;"><br><span>{{profile.user.username}}</span>
+            <span class='text-muted'>{{profile.bio}}</span><br>
+            <div>
+                <span><b>{{count}}</b> posts</span> &nbsp;<span><b>0</b> followers </span>&nbsp;<span><b>0</b> following</span>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row" >
+            <div class="col-xs-0 col-sm-0 col-md-1 col-lg-1"></div>
+            <div class='col-md-10 col-lg-10' id='gallery'>
+                {% for post in posts %}
+             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                     <div class="portfolio-wrap ">
+                         <div class="portfolio-wrap hovereffect">
+                             <a class="img-overlay" data-toggle="modal" data-target="#{{post.id}}" style="width:100%">
+                                 <img src="{{post.post_image.url}}" width='100%' height='280px' href="" class="post" alt="post" >
+                                 <div class="overlay">
+                                    <h4 class="fas fa-heart">{{post.like}}</i> <i class="fas fa-comment">{{count}}</i></h4>
+                                 </div>
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+        {% endfor %}
+            </div>
+        <!-- post details modal -->
+        {% for post in posts %}
+            <div class="modal fade" id="{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class='modal-header'><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style='color:white;'>&times;</span>
+                    </button></div>
+                    <div class="modal-content">
+                        <div class='row'>
+                        <div class='col-md-8'><img id="img{{post.id}}" src="{{post.post_image.url}}" width='100%' height='500vh'class="img" alt="post"><br></div>
+                        <div class='col-md-3'>
+                            <div>
+                                <h5>{{post.user|title}}<br>
+                                <small><i class="fas fa-map-marker-alt"></i><span>{{post.location}}</span></small></h5>
+                            </div><br>
+                                <div><b>{{post.user}}</b> {{post.caption}}</div><br>
+                            {% for comment in comments|slice:":8" %}
+                            {% if comment.post.id == post.id %}
+                            <p>
+                                <b>{{comment.user.username}}</b> {{comment.comment}}
+                            </p>
+                            {% endif %}
+                            {% endfor %}
+                            <div>
+                                <form action="{%url 'insta' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post" value="{{post.id}}">
+                                    <button class='btn btn-danger' type='submit'><i> </i></button>
+                                    <a href="{% url 'single_post' post_id=post.id %}" ><i class="far fa-comment"></i></a>
+                                </form>
+                            </div><br>
+                            <p>{{post.like}} likes</p><br><br>
+                        
+                            <div ><a class='panel-footer' href="{% url 'single_post' post_id=post.id %}" style='text-decoration:none;'class='text-info'>Add a comment...</a><br><br>
+                            <span class='text-muted small'>{{post.date_posted|timesince}} ago</span><br></div><br>
+                            <a class='btn btn-danger' href="{% url 'delete_post' post_id=post.id %}" style='text-decoration:none;'>Delete</a>
+                     </div></div>
+                        </div>
+                    </div></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    
+</div>
+{% endblock %}
