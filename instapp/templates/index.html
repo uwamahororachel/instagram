@@ -1,0 +1,73 @@
+{%extends 'base.html'%}
+{% load static%}
+{% block content %}
+{{block.super}}
+
+<style>
+    #suggestions{
+        position:fixed;
+        top:80px;
+        right:0;
+        }
+td{
+    border: none;
+}
+#img{
+    border-radius: 50%;
+}
+@media screen and (max-width:992px){
+    #suggestions{
+        position:absolute;
+        right:auto;
+        top:auto;
+    }
+}
+
+</style>
+<div class="container" style='margin-top:90px'>
+    <div class="row" id='timeline'>
+        <div class="col-xs-0 col-sm-0 col-md-1 col-lg-1"></div>
+        <div class="col-md-7 col-lg-7">
+            {% for post in posts %}
+            <div class='panel panel-default'>
+               <div class='panel-heading'>
+                       <span>
+                            <h5>
+                                <img class="img-fluid rounded-circle " height="40" width="40" src="{{ post.profile.profile_photo.url }}" id="img" alt="{{ post.user }}">   
+                                <a href="/profile/{{post.profile.id}}" style='text-decoration: none; color:black'><b>{{post.user}}</a></b><br><small><i class="fas fa-map-marker-alt"></i>{{post.location}}</small>
+                            </h5>
+                        </span>
+                    </div>
+                <div class='panel-body'>
+                    <a href="{% url 'single_post' post_id=post.id %}"><img src="{{post.post_image.url}}" width='100%' class="post" alt="post" ></a><br><br>
+                    <div>
+                        <form action="{%url 'insta' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="post" value="{{post.id}}">
+                            <button type='submit'style="background-color:#000;"><i class="far fa-heart"> </i></button>
+                            <a href="{% url 'single_post' post_id=post.id %}"><i class="far fa-comment"></i></a>
+                        </form>
+                    </div><br>
+                    <p>{{post.like}} likes</p>
+                    <div><b>{{post.user}}</b> {{post.caption}}<span style='display:block;'class='text-muted small'>{{post.date_posted|timesince}} ago</span></div><br>
+                    {% for comment in comments|slice:":10" %}
+                    {% if comment.post.id == post.id %}
+                    <div class='panel'>
+                        <b>{{comment.user.username}}</b> {{comment.comment}}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                    <div class='panel-footer'><a href="{% url 'single_post' post_id=post.id %}">Add a comment </a></div>
+             </div><br><br>
+            {% endfor %}</div>
+        <div class='col-xs-7 col-sm-7 col-md-4 col-lg-4' id='suggestions'>
+        <div class="row">
+            {% if my_profile %}
+            <div class='col-md-3'><img class="img-fluid rounded-circle " src="{{my_profile.profile_photo.url}}" style="height:70px;width:70px;margin-top:5px;margin-bottom:5px; border-radius:50%;"></div>
+            <div class='col-md-3'><br><span><b style="padding-right: 30px;">{{my_profile.user.username}}</b><a href="/logout"><b><small>Switch</small></b></a></div>
+            </span><br>
+            {% else %}
+            <div class='col-md-3'><a href="{% url 'add_profile' %}" class='btn btn-info' style='background-color: rgba(247, 120, 204, 0.267);border:none;'><i class="fas fa-plus"></i>Add profile</a></div>
+           
+{% endblock%}
