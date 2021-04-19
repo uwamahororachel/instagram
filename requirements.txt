@@ -1,0 +1,16 @@
+asgiref==3.3.4
+confusable-homoglyphs==3.2.0
+Django==1.11.29
+django-bootstrap3==15.0.0
+django-registration==2.4.1
+django-tinymce==3.3.0
+importlib-metadata==2.1.1
+Pillow==8.2.0
+psycopg2-binary==2.8.6
+python-decouple==3.4
+pytz==2020.5
+soupsieve==2.1
+sqlparse==0.4.1
+typing-extensions==3.7.4.3
+whitenoise==5.2.0
+zipp==3.4.0
